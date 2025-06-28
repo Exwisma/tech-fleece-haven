@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo } from 'react';
 import { Product } from '../types/product';
 import ProductCard from './ProductCard';
@@ -15,7 +16,7 @@ interface FilterOptions {
   sortBy: string;
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ products, title = "Our Collection" }) => {
+const ProductGrid: React.FC<ProductGridProps> = ({ products, title = "Наша Коллекция" }) => {
   const [filters, setFilters] = useState<FilterOptions>({
     category: 'all',
     gender: 'all',
@@ -38,8 +39,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, title = "Our Collec
       // Price range filter
       if (filters.priceRange !== 'all') {
         const [min, max] = filters.priceRange.split('-').map(p => p.replace('+', ''));
-        const minPrice = parseInt(min);
-        const maxPrice = max ? parseInt(max) : Infinity;
+        const minPrice = parseInt(min) * 12000; // Convert to UZS (assuming 1$ = 12000 UZS)
+        const maxPrice = max ? parseInt(max) * 12000 : Infinity;
         
         if (product.price < minPrice || product.price > maxPrice) {
           return false;
@@ -77,8 +78,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, title = "Our Collec
         <div className="text-center mb-12">
           <h2 className="text-4xl font-display font-bold mb-4">{title}</h2>
           <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Discover our premium collection of Nike Tech Fleece apparel, 
-            designed for comfort, style, and performance.
+            Откройте для себя нашу премиальную коллекцию одежды Nike Tech Fleece, 
+            созданную для комфорта, стиля и производительности.
           </p>
         </div>
 
@@ -90,7 +91,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, title = "Our Collec
         {/* Results Count */}
         <div className="mb-6">
           <p className="text-gray-600 dark:text-gray-400">
-            Showing {filteredAndSortedProducts.length} of {products.length} products
+            Показано {filteredAndSortedProducts.length} из {products.length} товаров
           </p>
         </div>
 
@@ -104,9 +105,9 @@ const ProductGrid: React.FC<ProductGridProps> = ({ products, title = "Our Collec
         {/* No Results */}
         {filteredAndSortedProducts.length === 0 && (
           <div className="text-center py-12">
-            <h3 className="text-2xl font-semibold mb-4">No products found</h3>
+            <h3 className="text-2xl font-semibold mb-4">Товары не найдены</h3>
             <p className="text-gray-600 dark:text-gray-400 mb-6">
-              Try adjusting your filters to see more products.
+              Попробуйте изменить фильтры, чтобы увидеть больше товаров.
             </p>
           </div>
         )}

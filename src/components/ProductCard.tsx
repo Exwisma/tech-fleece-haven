@@ -17,6 +17,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const [isLiked, setIsLiked] = useState(false);
   const { addToCart } = useCart();
 
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('ru-UZ', {
+      style: 'currency',
+      currency: 'UZS',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price).replace('UZS', 'сум');
+  };
+
   const handleAddToCart = () => {
     addToCart(product, selectedColor, selectedSize);
   };
@@ -40,14 +49,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Badges */}
         <div className="absolute top-4 left-4 flex flex-col gap-2">
           {product.isNew && (
-            <Badge className="bg-green-500 hover:bg-green-600">New</Badge>
+            <Badge className="bg-green-500 hover:bg-green-600">Новинка</Badge>
           )}
           {product.isBestSeller && (
-            <Badge className="bg-orange-500 hover:bg-orange-600">Best Seller</Badge>
+            <Badge className="bg-orange-500 hover:bg-orange-600">Хит продаж</Badge>
           )}
           {product.originalPrice && (
             <Badge variant="destructive">
-              {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+              -{Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}%
             </Badge>
           )}
         </div>
@@ -71,7 +80,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           <Button onClick={handleAddToCart} className="w-full btn-gradient">
             <ShoppingCart className="h-4 w-4 mr-2" />
-            Quick Add
+            Быстро в корзину
           </Button>
         </div>
       </div>
@@ -87,7 +96,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         {/* Colors */}
         <div className="space-y-2">
-          <div className="text-sm font-medium">Colors:</div>
+          <div className="text-sm font-medium">Цвета:</div>
           <div className="flex gap-2">
             {product.colors.map((color) => (
               <button
@@ -97,14 +106,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
                   selectedColor === color ? 'border-blue-500 scale-110' : 'border-gray-300'
                 }`}
                 style={{
-                  backgroundColor: color.toLowerCase() === 'white' ? '#ffffff' : 
-                                 color.toLowerCase() === 'black' ? '#000000' :
-                                 color.toLowerCase() === 'grey' || color.toLowerCase() === 'gray' ? '#6b7280' :
-                                 color.toLowerCase() === 'navy' ? '#1e3a8a' :
-                                 color.toLowerCase() === 'pink' ? '#ec4899' :
-                                 color.toLowerCase() === 'purple' ? '#8b5cf6' :
-                                 color.toLowerCase() === 'olive' ? '#84cc16' :
-                                 color.toLowerCase() === 'burgundy' ? '#991b1b' : '#6b7280'
+                  backgroundColor: color.toLowerCase() === 'белый' ? '#ffffff' : 
+                                 color.toLowerCase() === 'черный' ? '#000000' :
+                                 color.toLowerCase() === 'серый' || color.toLowerCase() === 'светло-серый' || color.toLowerCase() === 'темно-серый' ? '#6b7280' :
+                                 color.toLowerCase() === 'синий' ? '#1e3a8a' :
+                                 color.toLowerCase() === 'розовый' ? '#ec4899' :
+                                 color.toLowerCase() === 'фиолетовый' ? '#8b5cf6' :
+                                 color.toLowerCase() === 'оливковый' ? '#84cc16' :
+                                 color.toLowerCase() === 'бордовый' ? '#991b1b' : '#6b7280'
                 }}
                 title={color}
               />
@@ -114,7 +123,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         {/* Sizes */}
         <div className="space-y-2">
-          <div className="text-sm font-medium">Sizes:</div>
+          <div className="text-sm font-medium">Размеры:</div>
           <div className="flex gap-2 flex-wrap">
             {product.sizes.map((size) => (
               <button
@@ -135,15 +144,15 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
         {/* Price */}
         <div className="flex items-center justify-between pt-4 border-t">
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold">${product.price}</span>
+            <span className="text-2xl font-bold">{formatPrice(product.price)}</span>
             {product.originalPrice && (
               <span className="text-sm text-gray-500 line-through">
-                ${product.originalPrice}
+                {formatPrice(product.originalPrice)}
               </span>
             )}
           </div>
           <div className="text-sm text-gray-500 capitalize">
-            {product.gender}
+            {product.gender === 'men' ? 'мужское' : product.gender === 'women' ? 'женское' : 'унисекс'}
           </div>
         </div>
       </div>

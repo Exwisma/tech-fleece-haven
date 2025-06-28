@@ -10,12 +10,22 @@ interface CartContextType {
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
+  formatPrice: (price: number) => string;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('ru-UZ', {
+      style: 'currency',
+      currency: 'UZS',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(price).replace('UZS', 'сум');
+  };
 
   const addToCart = (product: Product, color: string, size: string, quantity = 1) => {
     setCartItems(prev => {
@@ -72,6 +82,7 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         clearCart,
         getTotalItems,
         getTotalPrice,
+        formatPrice,
       }}
     >
       {children}
